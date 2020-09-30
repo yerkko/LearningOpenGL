@@ -31,6 +31,7 @@ static unsigned int CompileShader(unsigned int type, const std::string& source) 
 			<< " shader" << std::endl;
 
 		glDeleteShader(id);
+		delete[](log);
 		return 0;
 
 	}
