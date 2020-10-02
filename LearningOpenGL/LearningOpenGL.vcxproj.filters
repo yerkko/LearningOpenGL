@@ -18,5 +18,17 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\ShaderParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\sh_basic\sh_fragment.glsl" />
+    <None Include="res\sh_basic\sh_vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\common\ShaderParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

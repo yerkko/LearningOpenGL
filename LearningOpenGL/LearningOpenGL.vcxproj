@@ -159,7 +159,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\common\ShaderParser.cpp" />
     <ClCompile Include="src\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\sh_basic\sh_fragment.glsl" />
+    <None Include="res\sh_basic\sh_vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\common\ShaderParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

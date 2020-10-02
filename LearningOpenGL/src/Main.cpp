@@ -3,8 +3,12 @@
 #include <iostream>
 #include <cmath>
 #include <memory>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include "common/ShaderParser.h"
 
-#define uint unsigned int
+
 
 static unsigned int CompileShader(unsigned int type, const std::string& source) {
 
@@ -72,7 +76,7 @@ int main(void)
 	if (!glfwInit())
 		return -1;
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(640, 480, "Learning OpenGL", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -89,62 +93,68 @@ int main(void)
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
 
-	/*float positions[6] = {
-	-0.5f, -0.5f,
-	0.0f, 0.5f,
-	0.5f, -0.5f,
-	};*/
+	float positions[8] = {
+	 -0.5f, -0.5f,  // 0 
+	  0.5f, -0.5f ,  // 1
+	  0.5f, 0.5f ,  // 2
+	 -0.5f, 0.5f   // 3
+	}; 
+
+	unsigned int indices[] = 
+	
+	
+	{ 0, 1, 2,
+	  2, 3, 0 };
+
+	/*
+
+	x ----- x 0.5, 0.5 (2)
+	|		|
+	|		|
+	|		|
+	|		|
+	x ----- x 0.5, -0.5 (1) 
+	
+	
+	
+	*/
 
 
+	// vertex buffer
 
-	typedef struct v2 {
-		float x;
-		float y;
-
-	}v2f;
-
-	v2f positions[3] = {
-
-		v2f{-0.5f,-0.5f},
-		v2f{0.0f,0.5f},
-		v2f{0.5f,-0.5f}
-
-	};
+	unsigned int vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
 
 
-	unsigned int buffer;
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
-	glGenBuffers(1, &buffer);
-
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(positions[0]), positions, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(positions[0]), 0);
-
-	const std::string vs = R"glsl(
-#version 330 core
-
-layout(location = 0) in vec4 position;
-
-void main(){
-   gl_Position = position;
-}
-)glsl";
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(positions[0]), 0);
 
 
-	const std::string fs = R"glsl(
-#version 330 core
 
-layout(location = 0) out vec4 color;
 
-void main(){
-   color = vec4(0.0,1.0,0.0,1.0);
-}
-)glsl";
+
+
+
+
+
+	//index buffer
+
+	unsigned int indexBuffer;
+	glGenBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+
+	//shader setup
+
+	
+	const std::string vs = parseShader("res/sh_basic/sh_vertex.glsl");
+	const std::string fs = parseShader("res/sh_basic/sh_fragment.glsl");
 
 	unsigned int shader = CreateShader(vs, fs);
 
@@ -157,13 +167,16 @@ void main(){
 		glClear(GL_COLOR_BUFFER_BIT);
 
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
+
+	glDeleteProgram(shader);
 
 	glfwTerminate();
 	return 0;
